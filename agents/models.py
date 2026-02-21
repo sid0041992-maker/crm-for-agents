@@ -30,7 +30,9 @@ class Agent(models.Model):
     class Meta:
         verbose_name = "Агент"
         verbose_name_plural = "Агенты"
-        class Deal(models.Model):
+
+
+class Deal(models.Model):
     agent = models.ForeignKey(
         Agent,
         on_delete=models.CASCADE,
@@ -50,6 +52,31 @@ class Agent(models.Model):
         auto_now_add=True,
         verbose_name="Дата сделки"
     )
+
+    def calculate_commission(self):
+        """
+        Возвращает словарь с расчётом комиссий
+        """
+        # Комиссия агента (50% от аренды)
+        agent_commission = self.rent_amount * 0.5
+
+        # Наша комиссия (15% от комиссии агента)
+        our_commission = agent_commission * 0.15
+
+        # Комиссия со страховки (если есть)
+        insurance_commission = 0
+        if self.has_insurance:
+            # Страховка стоит 10 000, наша доля 25%
+            insurance_commission = 10000 * 0.25
+
+        total = our_commission + insurance_commission
+
+        return {
+            'agent_commission': round(agent_commission, 2),
+            'our_commission': round(our_commission, 2),
+            'insurance_commission': round(insurance_commission, 2),
+            'total': round(total, 2)
+        }
 
     def __str__(self):
         return f"Сделка {self.id} | {self.agent.name} | {self.rent_amount}₽"
