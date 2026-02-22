@@ -1,0 +1,33 @@
+{% extends "agents/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'agents/css/apartment_list.css' %}">
+
+<div class="apartment-list">
+    <div class="apartment-list__header">
+        <h1>Мои объекты</h1>
+        <button class="ui-button ui-button--primary">+ Создать объект</button>
+    </div>
+
+    <div class="apartment-grid">
+        {% for property in properties %}
+        <div class="apartment-card">
+            <div class="apartment-card__photo" style="background-image: url('{{ property.main_image|default:'https://via.placeholder.com/300x200' }}');"></div>
+            <div class="apartment-card__content">
+                <h3>{{ property.address }}</h3>
+                <div class="apartment-card__details">
+                    <span>{{ property.get_property_type_display }}</span>
+                    <span>{{ property.area }} м²</span>
+                    <span>{{ property.floor }}/{{ property.total_floors }} эт.</span>
+                </div>
+                <div class="apartment-card__status">{{ property.get_status_display }}</div>
+                <a href="/apartment/{{ property.id }}/" class="ui-button ui-button--transparent">Подробнее</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>У вас пока нет объектов</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

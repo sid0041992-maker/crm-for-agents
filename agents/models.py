@@ -67,27 +67,42 @@ class Property(models.Model):
 
 
 class Deal(models.Model):
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, verbose_name="Агент", related_name="deals")
+    STATUS_CHOICES = [
+        ('draft', 'Черновик'),
+        ('owner_pending', 'Ожидание подписи собственника'),
+        ('tenant_pending', 'Ожидание подписи арендатора'),
+        ('completed', 'Завершена'),
+    ]
+
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='deals', verbose_name="Объект")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_deals', verbose_name="Собственник", limit_choices_to={'role': 'owner'})
+    tenant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tenant_deals', verbose_name="Арендатор", limit_choices_to={'role': 'tenant'})
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='agent_deals', verbose_name="Агент")
+
     rent_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Сумма аренды (₽)")
     has_insurance = models.BooleanField(default=False, verbose_name="Страховка оформлена")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата сделки")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft', verbose_name="Статус")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def calculate_commission(self):
-        agent_commission = self.rent_amount * 0.5
-        our_commission = agent_commission * 0.15
-        insurance_commission = 0
-        if self.has_insurance:
-            insurance_commission = 10000 * 0.25
-        total = our_commission + insurance_commission
-        return {
-            'agent_commission': round(agent_commission, 2),
-            'our_commission': round(our_commission, 2),
-            'insurance_commission': round(insurance_commission, 2),
-            'total': round(total, 2)
-        }
+    from decimal import Decimal
+    agent_commission = self.rent_amount * Decimal('0.5')
+    our_commission = agent_commission * Decimal('0.15')
+    insurance_commission = Decimal('0')
+    if self.has_insurance:
+        insurance_commission = Decimal('10000') * Decimal('0.25')
+    total = our_commission + insurance_commission
+    return {
+        'agent_commission': round(agent_commission, 2),
+        'our_commission': round(our_commission, 2),
+        'insurance_commission': round(insurance_commission, 2),
+        'total': round(total, 2)
+    }
 
     def __str__(self):
-        return f"Сделка {self.id} | {self.agent.user.name} | {self.rent_amount}₽"
+        return f"Сделка {self.id} | {self.property.address}"
 
     class Meta:
         verbose_name = "Сделка"

@@ -22,7 +22,7 @@ git pull origin main
 ✅ Когда нужно сохранить изменения в Git
 text
 git add .
-git commit -m "что изменил"
+git commit -m "кораловый дизайн админки и чистая бза модели "
 git push origin main
 ✅ Если вылезла ошибка — не пугаться
 Скопировать красный текст и отправить сюда — разберёмся.
@@ -33,3 +33,6 @@ cd crm-for-agents
 venv\Scripts\activate
 python manage.py runserver
 Сохрани этот текст в блокнот или в файл start.txt рядом с проектом.
+
+Создать суперпользователя 
+python manage.py createsuperuser

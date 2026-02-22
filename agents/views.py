@@ -1,21 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Property, Deal
 
-def apartment_detail(request):
-    # Пока тестовые данные, потом заменим на настоящие из базы
+def apartment_list(request):
+    properties = Property.objects.all()
+    return render(request, 'agents/apartment_list.html', {'properties': properties})
+
+def apartment_detail(request, id):
+    property = get_object_or_404(Property, id=id)
     context = {
-        "property": {
-            "main_image": "https://via.placeholder.com/200x150",
-            "address_full": "Иркутск г., Рябикова б-р., 36/5",
-            "property_type": "студия",
-            "area": 30,
-            "floor": 14,
-            "floors_total": 14,
-            "contract_url": "#",
-            "service_contract_url": "#",
-            "acceptance_url": "#",
-        },
+        "property": property,
         "owner": {
-            "phone": "+7 (926) 596-8648",
+            "phone": property.owner.phone if property.owner else "не указан",
         },
         "tenant": {
             "phone": "+7 (234) 234-2342",
@@ -27,3 +22,7 @@ def apartment_detail(request):
         }
     }
     return render(request, "agents/apartment_detail.html", context)
+
+def deal_detail(request, id):
+    deal = get_object_or_404(Deal, id=id)
+    return render(request, 'agents/deal_detail.html', {'deal': deal})
