@@ -87,18 +87,18 @@ class Deal(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def calculate_commission(self):
-    from decimal import Decimal
-    agent_commission = self.rent_amount * Decimal('0.5')
-    our_commission = agent_commission * Decimal('0.15')
-    insurance_commission = Decimal('0')
-    if self.has_insurance:
-        insurance_commission = Decimal('10000') * Decimal('0.25')
-    total = our_commission + insurance_commission
-    return {
-        'agent_commission': round(agent_commission, 2),
-        'our_commission': round(our_commission, 2),
-        'insurance_commission': round(insurance_commission, 2),
-        'total': round(total, 2)
+        from decimal import Decimal
+        agent_commission = self.rent_amount * Decimal('0.5')
+        our_commission = agent_commission * Decimal('0.15')
+        insurance_commission = Decimal('0')
+        if self.has_insurance:
+            insurance_commission = Decimal('10000') * Decimal('0.25')
+        total = our_commission + insurance_commission
+        return {
+            'agent_commission': round(agent_commission, 2),
+            'our_commission': round(our_commission, 2),
+            'insurance_commission': round(insurance_commission, 2),
+            'total': round(total, 2)
     }
 
     def __str__(self):

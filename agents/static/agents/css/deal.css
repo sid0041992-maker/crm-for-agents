@@ -1,0 +1,35 @@
+.deal-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.deal-header {
+    margin-bottom: 30px;
+}
+
+.deal-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.deal-section h3 {
+    margin-top: 0;
+    color: #e83e8c;
+}
+
+.ui-button--primary {
+    background: #e83e8c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.ui-button--primary:hover {
+    background: #ff6b6b;
+}
