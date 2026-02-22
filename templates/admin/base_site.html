@@ -1,0 +1,66 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+{% block title %}
+{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}
+{% endblock %}
+
+{% block extrastyle %}
+<style>
+    :root {
+        --primary: #e83e8c;
+        --secondary: #ff6b6b;
+        --accent: #e83e8c;
+        --header-bg: #e83e8c;
+        --header-link: #ffffff;
+        --link-fg: #e83e8c;
+        --link-hover-bg: #ff6b6b;
+        --button-bg: #e83e8c;
+        --button-hover-bg: #ff6b6b;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    #header {
+        background: var(--header-bg);
+        color: white;
+    }
+
+    #branding h1 {
+        color: white;
+    }
+
+    a:link, a:visited {
+        color: var(--link-fg);
+    }
+
+    .button, input[type=submit], input[type=button] {
+        background: var(--button-bg);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+    }
+
+    .button:hover, input[type=submit]:hover {
+        background: var(--button-hover-bg);
+    }
+
+    .module h2, .module caption {
+        background: var(--secondary);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

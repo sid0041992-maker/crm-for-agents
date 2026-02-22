@@ -1,36 +1,25 @@
 from django.contrib import admin
-from .models import Agent, Deal
+from .models import User, Agent, Property, Deal
 
-@admin.register(Agent)
-class AgentAdmin(admin.ModelAdmin):
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'role', 'created_at')
     list_filter = ('role',)
     search_fields = ('name', 'phone')
 
+@admin.register(Agent)
+class AgentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user')
+    search_fields = ('user__name', 'user__phone')
+
+@admin.register(Property)
+class PropertyAdmin(admin.ModelAdmin):
+    list_display = ('address', 'property_type', 'area', 'status', 'owner', 'agent')
+    list_filter = ('property_type', 'status')
+    search_fields = ('address',)
 
 @admin.register(Deal)
 class DealAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'agent',
-        'rent_amount',
-        'has_insurance',
-        'display_agent_commission',
-        'display_our_commission',
-        'display_total_commission',
-        'created_at'
-    )
+    list_display = ('id', 'agent', 'rent_amount', 'has_insurance', 'created_at')
     list_filter = ('has_insurance', 'created_at')
-    search_fields = ('agent__name', 'agent__phone')
-
-    def display_agent_commission(self, obj):
-        return f"{obj.calculate_commission()['agent_commission']} ₽"
-    display_agent_commission.short_description = "Комиссия агента"
-
-    def display_our_commission(self, obj):
-        return f"{obj.calculate_commission()['our_commission']} ₽"
-    display_our_commission.short_description = "Наша комиссия"
-
-    def display_total_commission(self, obj):
-        return f"{obj.calculate_commission()['total']} ₽"
-    display_total_commission.short_description = "Итого"
+    search_fields = ('agent__user__name', 'agent__user__phone')

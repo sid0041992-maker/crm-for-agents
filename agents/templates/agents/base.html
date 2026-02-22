@@ -6,5 +6,28 @@
 </head>
 <body>
     {% block content %}{% endblock %}
+    <style>
+    /* Твой стиль для админки */
+    body {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+    #header {
+        background: #e83e8c !important;
+        color: white !important;
+    }
+    .module h2, .module caption {
+        background: #ff6b6b !important;
+    }
+    a:link, a:visited {
+        color: #e83e8c !important;
+    }
+    .button, input[type=submit], input[type=button] {
+        background: #e83e8c !important;
+        color: white !important;
+    }
+    .button:hover, input[type=submit]:hover {
+        background: #ff6b6b !important;
+    }
+</style>
 </body>
 </html>
